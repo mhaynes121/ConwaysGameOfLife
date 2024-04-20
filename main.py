@@ -121,9 +121,9 @@ def census(gameBoard) -> None:
 #   perform a census to see how many neighbors each lifeform has
 #   showLife() to display the world
 #   begin the game loop 
-#       perform a census to update neighbor count
 #       evolve life to create, sustain, destroy lifeforms
 #       copy modified gameboard to existing one
+#       perform a census to see how many neighbors each lifeform has now
 #       showLife() to display the updated world
 def main():
     try:
@@ -143,7 +143,6 @@ def main():
                 copyGameboard(modifiedGameboard, gameboard)
                 census(gameboard)
                 showLife()            
-                #input('Press key to continue...')
     except KeyboardInterrupt:
         os.system('cls')
         print('We hope you had fun watching your world evolve! See you again, soon!')
