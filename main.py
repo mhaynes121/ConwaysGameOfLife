@@ -1,7 +1,6 @@
 # Conway's Game of Life
 import random
 import time
-import os
 import sys
 
 from lifeForm import lifeform
@@ -11,6 +10,15 @@ modifiedGameboard = []
 debugMode = False
 boardRows = 0
 boardCols = 0
+generations = 0
+lifeEvolving = False
+
+# clear the terminal by writing through the same buffered stdout stream
+# used for the rest of the output, instead of shelling out to a separate
+# process (os.system) that can race with/interleave against it
+def clearScreen() -> None:
+    sys.stdout.write('\033[H\033[2J')
+    sys.stdout.flush()
 
 # replace existing gameboard with modified version
 def copyGameboard(fromBoard, toBoard) -> None:
@@ -55,8 +63,8 @@ def bigBang(lifeSeeds:int=1) -> None:
     copyGameboard(modifiedGameboard, gameboard)
 
 # displays the gameboard with life status for each lifeform
-def showLife() -> None: 
-    os.system('cls' if os.name == 'nt' else 'clear')
+def showLife() -> None:
+    clearScreen()
     i = 0
     while i < len(gameboard):
         j = 0
@@ -89,12 +97,20 @@ def evolveLife() -> None:
 
 # lets see if there are any lifeforms around us
 def census(gameBoard) -> None:
+    global lifeEvolving
+
+    lifeEvolving = False
+
     rows = 0
     while rows <= (len(gameBoard)-1):
         cols = 0
         while cols <= (len(gameBoard[0])-1):
             curLF = gameboard[rows][cols]
             neighborCount = 0 
+
+            if gameBoard[rows][cols].isAlive():
+                lifeEvolving = True
+                
             if curLF.ypos > 0 and gameBoard[rows][cols-1].isAlive():
                 neighborCount += 1
             if curLF.ypos < len(gameboard[0])-1 and gameBoard[rows][cols+1].isAlive():
@@ -126,11 +142,14 @@ def census(gameBoard) -> None:
 #       perform a census to see how many neighbors each lifeform has now
 #       showLife() to display the updated world
 def main():
+    global generations, lifeEvolving
     try:
         populateGameboard(boardRows, boardCols)
         #populateGameboard(25, 75)
         totalLifeForms = len(gameboard) * len(gameboard[0])
         bigBang(random.randrange(int((totalLifeForms*.25)), int((totalLifeForms*.40)), 1))
+        lifeEvolving = True
+        generations += 1
         census(gameboard)
         showLife()
         pretime = time.time()
@@ -143,8 +162,16 @@ def main():
                 copyGameboard(modifiedGameboard, gameboard)
                 census(gameboard)
                 showLife()            
+
+                if lifeEvolving:
+                    generations += 1
+                else:
+                    clearScreen()
+                    print('Your world survived for ' + str(generations) + ' generations before it met its demise!')
+                    sys.exit()
+
     except KeyboardInterrupt:
-        os.system('cls' if os.name == 'nt' else 'clear')
+        clearScreen()
         print('We hope you had fun watching your world evolve! See you again, soon!')
         sys.exit()
     
