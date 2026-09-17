@@ -6,6 +6,7 @@ class lifeform:
         self.neighbors = neighbors
         self.alive = alive
         self.generationsLived = 0
+        self.generationsDead = 2 # starts eligible for its first-ever birth
 
     # getr for alive status
     def isAlive(self) -> bool:
@@ -19,6 +20,7 @@ class lifeform:
     # kill off this lifeform
     def endLife(self) -> None:
         self.alive = False
+        self.generationsDead = 0
 
     # called once per generation for a lifeform that survives into the next one;
     # dies of old age after living ~80 human-equivalent years (4 generations)
@@ -26,6 +28,11 @@ class lifeform:
         self.generationsLived += 1
         if self.generationsLived >= 4:
             self.endLife()
+
+    # called once per generation for a lifeform that remains dead; tracks how
+    # long it's been dead so evolveLife() can enforce a rebirth cooldown
+    def ageOneDeadGeneration(self) -> None:
+        self.generationsDead += 1
 
     # display the appropriate ascii character depending on if this lifeform is living or not
     def printSelf(self, debugMode) -> None:

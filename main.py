@@ -12,6 +12,7 @@ boardRows = 0
 boardCols = 0
 generations = 0
 lifeEvolving = False
+REBIRTH_COOLDOWN = 2 # generations a cell must stay dead before it can be reborn
 
 # clear the terminal by writing through the same buffered stdout stream
 # used for the rest of the output, instead of shelling out to a separate
@@ -90,11 +91,13 @@ def evolveLife() -> None:
 
             if oldLF.neighbors < 2 or oldLF.neighbors > 3:
                 newLF.endLife()
-            elif oldLF.neighbors == 3 and oldLF.isAlive() is False:
+            elif oldLF.neighbors == 3 and oldLF.isAlive() is False and oldLF.generationsDead >= REBIRTH_COOLDOWN:
                 newLF.beginLife()
 
             if newLF.isAlive():
                 newLF.ageOneGeneration()
+            else:
+                newLF.ageOneDeadGeneration()
             cols +=1
         rows += 1
 
