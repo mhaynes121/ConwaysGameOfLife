@@ -5,6 +5,8 @@ import sys
 
 from lifeForm import lifeform
 
+REBIRTH_COOLDOWN = 2 # generations a cell must stay dead before it can be reborn
+
 gameboard = []
 modifiedGameboard = []
 debugMode = False
@@ -12,7 +14,6 @@ boardRows = 0
 boardCols = 0
 generations = 0
 lifeEvolving = False
-REBIRTH_COOLDOWN = 2 # generations a cell must stay dead before it can be reborn
 
 # clear the terminal by writing through the same buffered stdout stream
 # used for the rest of the output, instead of shelling out to a separate
