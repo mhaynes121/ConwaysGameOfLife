@@ -92,6 +92,9 @@ def evolveLife() -> None:
                 newLF.endLife()
             elif oldLF.neighbors == 3 and oldLF.isAlive() is False:
                 newLF.beginLife()
+
+            if newLF.isAlive():
+                newLF.ageOneGeneration()
             cols +=1
         rows += 1
 
@@ -178,5 +181,13 @@ def main():
 if __name__ == "__main__":
     boardRows = int(sys.argv[1])
     boardCols = int(sys.argv[2])
-    debugMode = True if (sys.argv[3].lower() == 'true' or sys.argv[3].lower() == 't' or sys.argv[3] == '1') else False
+    #debugMode = True if (sys.argv[3].lower() == 'true' or sys.argv[3].lower() == 't' or sys.argv[3] == '1') else False
+
+    if (sys.argv[3].lower() == 'nbrs' or sys.argv[3].lower() == 'n' or sys.argv[3] == '1'):
+        debugMode = 1
+    elif (sys.argv[3].lower() == 'gen' or sys.argv[3].lower() == 'g' or sys.argv[3] == '2'):        
+        debugMode = 2
+    else:
+        debugMode = 0
+
     main()

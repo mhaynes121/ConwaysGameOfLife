@@ -14,19 +14,29 @@ class lifeform:
     # the miracle of birth
     def beginLife(self) -> None:
         self.alive = True
+        self.generationsLived = 0
 
     # kill off this lifeform
     def endLife(self) -> None:
         self.alive = False
 
+    # called once per generation for a lifeform that survives into the next one;
+    # dies of old age after living ~80 human-equivalent years (4 generations)
+    def ageOneGeneration(self) -> None:
+        self.generationsLived += 1
+        if self.generationsLived >= 4:
+            self.endLife()
+
     # display the appropriate ascii character depending on if this lifeform is living or not
     def printSelf(self, debugMode) -> None:
-        # We call this each game loop so this can also be short circuited into a generation counter for each lifeform.
-        self.generationsLived += 1
-
-        if debugMode: # if debuging let's show the number of neighbors instead as that's more useful
+        if debugMode == 1: # if debuging is set to 1 let's show the number of neighbors instead as that's more useful
             if self.alive:
                 print(str(self.neighbors), end = '')
+            else:
+                print(u'\xb7', end = '') # u'\xb7'     #  0xFA -> MIDDLE DOT
+        elif debugMode == 2: # if it's set to 2 let's show the number of generations this LF has lived
+            if self.alive:
+                print(str(self.generationsLived), end = '')
             else:
                 print(u'\xb7', end = '') # u'\xb7'     #  0xFA -> MIDDLE DOT
         else:
@@ -34,7 +44,3 @@ class lifeform:
                 print(u'\u2593', end = '') # u'\u2593'   #  0xB2 -> DARK SHADE
             else:
                 print(u'\xb7', end = '') # u'\xb7'     #  0xFA -> MIDDLE DOT
-
-        # If we lived for 4 generations, aprox 80 year life span human years, we will die off due to old age.
-        if self.generationsLived >= 4:
-            self.endLife()
