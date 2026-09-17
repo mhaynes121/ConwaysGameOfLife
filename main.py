@@ -5,7 +5,7 @@ import sys
 
 from lifeForm import lifeform
 
-REBIRTH_COOLDOWN = 2 # generations a cell must stay dead before it can be reborn
+REBIRTH_COOLDOWN = 1 # generations a cell must stay dead before it can be reborn
 
 gameboard = []
 modifiedGameboard = []
