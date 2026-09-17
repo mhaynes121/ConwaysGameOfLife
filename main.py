@@ -20,7 +20,7 @@ def copyGameboard(fromBoard, toBoard) -> None:
     while row < len(fromBoard):
         colData = []
         col = 0
-        while col < len(fromBoard[0])-1:
+        while col < len(fromBoard[0]):
             colData.append(fromBoard[row][col])
             col += 1
         row += 1
@@ -56,7 +56,7 @@ def bigBang(lifeSeeds:int=1) -> None:
 
 # displays the gameboard with life status for each lifeform
 def showLife() -> None: 
-    os.system('cls')
+    os.system('cls' if os.name == 'nt' else 'clear')
     i = 0
     while i < len(gameboard):
         j = 0
@@ -144,7 +144,7 @@ def main():
                 census(gameboard)
                 showLife()            
     except KeyboardInterrupt:
-        os.system('cls')
+        os.system('cls' if os.name == 'nt' else 'clear')
         print('We hope you had fun watching your world evolve! See you again, soon!')
         sys.exit()
     
